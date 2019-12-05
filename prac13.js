@@ -23,3 +23,26 @@ promise
 //then 이나 catch에서 다시 다른 then이나 catch를 붙일 수 있음->이전 then의 return값을 다음 thendml 매개변수로 넘김
 //프로미스를 return한 경우 프로미스가 수행된 후 다음 then이나 cathc가 호출
 
+promise.then((message)=>{
+    return new Promise((resolve, reject)=>{
+        resolve(message);
+    });
+})
+
+.then((message2)=>{
+    console.log(message2);
+    return new Promise((resolve, reject)=>{
+        resolve(message2);
+    });
+})
+
+.then((message3)=>{
+    console.log(message3);
+})
+
+.catch((error)=>{
+    console.error(error);
+});
+
+//처음 then에서 message를 resolve하면 다음 then에서 받을 수있음.
+//message2로 resolve했으므로 다음 then에서 message3를 받을수 있음.
