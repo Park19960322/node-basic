@@ -1,0 +1,60 @@
+//express 의 핵심구조인 app모듈에 대해 이해
+
+var createError = require('http-errors');
+var express = require('express');
+var path = require('path');
+
+//cookie-parser:요청에 동봉된 쿠키를 해석
+var cookieParser = require('cookie-parser');
+
+//morgan:요청에 대한 정보를 콘솔에 기록
+var logger = require('morgan');
+
+var indexRouter = reuire('./routes/index');
+var usersRouter = require('./routes/users');
+
+//express 패키지 호출
+var app = express();
+
+//app.set 메서드를 이용해서 익스프레스 앱 설정
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'pug');
+
+//미들웨어 만들어 보기 예시
+app.use(function(req, res, next){
+    console.log(req.url, '저도 미들웨어 입니다');
+    next();//미들웨어 선언시 내부에 next()를 호출해줘야 다음 미들웨어로 넘어간다.
+});
+
+//app.use를 이용해서 미들웨어와 연결
+app.use(logger('dev'));
+
+//body-parser(익스프레스 내장기능): 요청의 본문을 해석해주는 미들웨어
+app.use(express.json());
+app.use(express.urlencoded({extended:false});
+
+
+app.use(cookieParser());
+
+//static 미들웨어: 정적인 파일들을 제공
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.use('/', indexRouter);
+app.use('/users', userRouter);
+
+app.use(function(req, res, next){
+    next(createError(404));
+});
+
+app.use(function(err, req, res, next){
+    res.locals.message = err.message;
+    res.locals.error = req.app.get('env') === 'development' ? err : {};
+
+    res.status(err.status : 500);
+    res.render('error');
+});
+
+//app 객체를 모듈로 생성
+module.exports = app;
+
+//

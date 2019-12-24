@@ -1,0 +1,21 @@
+//익스프레스의 핵심구조인 bin 이해하기
+
+
+
+//app, debug, http 모듈 가져오기
+var app = require('../app');
+var debug = require('debug')('learn-express:server');
+var http = require('http');
+
+//port 번호 생성->설정 번호 없을 시 기본번호 3000으로 설정
+//app.set 으로 설정한 포트번호 저장
+var port = nomarlizePort(process.env.PORT:'3000');
+app.set('port', port);
+
+//저장한 app 모듈을 createServer에 불러오기
+var server = http.createServer(app);
+
+//포트에 연결하고 서버 실행
+server.listen(port);
+server.on('error', onError);
+server.on('listening', onListening);
